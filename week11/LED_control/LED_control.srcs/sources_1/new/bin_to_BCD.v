@@ -40,9 +40,9 @@ always @(posedge clk or posedge rst) begin
             bcd[0] <= bin[7];
         end
         else begin
-            bcd[11:9] <= (bcd[11:8] >= 4'd5) ? bcd[11:8] + 2'd3 : bcd[11:8];
-            bcd[8:5] <= (bcd[7:4] >= 4'd5) ? bcd[7:4] + 2'd3 : bcd[7:4];
-            bcd[4:1] <= (bcd[4:1] >= 4'd5) ? bcd[4:1] + 2'd3 : bcd[4:1];
+            bcd[11:9] <= (bcd[11:8] >= 3'd5) ? bcd[11:8] + 2'd3 : bcd[11:8];
+            bcd[8:5] <= (bcd[7:4] >= 3'd5) ? bcd[7:4] + 2'd3 : bcd[7:4];
+            bcd[4:1] <= (bcd[3:0] >= 3'd5) ? bcd[3:0] + 2'd3 : bcd[3:0];
             bcd[0] <= bin[7-i];
         end
         i <= i + 1;
