@@ -137,7 +137,7 @@ always @(posedge clk or negedge rst) begin
             end
             LINE2 : begin
                 case(cnt)
-                    00 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1101_0101; // CG-RAM address set
+                    00 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1100_0000; // CG-RAM address set
                     01 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
                     02 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0000; // 0
                     03 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
