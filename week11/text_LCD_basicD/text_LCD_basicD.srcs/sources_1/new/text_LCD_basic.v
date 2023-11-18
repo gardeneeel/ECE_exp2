@@ -115,7 +115,7 @@ always @(posedge clk or negedge rst) begin
                 {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_0000_0111; // display shift right
             LINE1 : begin
                 case(cnt)
-                    00 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1001_0101; // CG-RAM address set
+                    00 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1001_0101; // DD-RAM address set
                     01 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0010_0000; //
                     02 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0100_1000; // H
                     03 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0100_0101; // E
@@ -137,7 +137,7 @@ always @(posedge clk or negedge rst) begin
             end
             LINE2 : begin
                 case(cnt)
-                    00 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1100_0000; // CG-RAM address set
+                    00 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1100_0000; // DD-RAM address set
                     01 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
                     02 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0000; // 0
                     03 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
