@@ -90,7 +90,7 @@ always @(posedge clk or negedge rst) begin
                 else cnt = cnt + 1;
             end
             CLEAR_DISP : begin
-                if (cnt == 5) state = SET_ADDRESS;
+                if (cnt == 5) state = WRITE;
                 if(cnt >= 5) cnt = 0;
                 else cnt = cnt + 1;
             end            
