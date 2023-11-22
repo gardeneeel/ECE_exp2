@@ -116,7 +116,7 @@ always @(posedge clk or negedge rst) begin
                    case(bcd[11:8])
                         1 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0001; // 1
                         2 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
-                        3 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_1011; // 3
+                        3 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0011; // 3
                         4 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0100; // 4
                         5 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0101; // 5
                         6 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0110; // 6
@@ -131,7 +131,7 @@ always @(posedge clk or negedge rst) begin
                     case(bcd[7:4])
                         1 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0001; // 1
                         2 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
-                        3 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_1011; // 3
+                        3 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0011; // 3
                         4 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0100; // 4
                         5 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0101; // 5
                         6 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0110; // 6
@@ -146,7 +146,7 @@ always @(posedge clk or negedge rst) begin
                     case(bcd[3:0])
                         1 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0001; // 1
                         2 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0010; // 2
-                        3 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_1011; // 3
+                        3 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0011; // 3
                         4 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0100; // 4
                         5 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0101; // 5
                         6 : {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_0_0011_0110; // 6
