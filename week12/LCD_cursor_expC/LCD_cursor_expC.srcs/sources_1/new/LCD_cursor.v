@@ -141,8 +141,14 @@ always @(posedge clk or negedge rst) begin
                 address <= 7'b000_0000;
             end    
             DELAY_T : begin
-                if(address == 7'b0010110) {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1100_0000; 
-                else if(address == 7'b1010110) {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_0001_0000;
+                if(address == 7'b0010110) begin
+                    {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1100_0000; // address 16 -> 40
+                    address <= 7'b100_0000;
+                end
+                else if(address == 7'b1010110) begin
+                    {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_1000_0000; // address 56 -> 0
+                    address <= 7'b000_0000;
+                end
                 else {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_0000_1111;
             end       
             WRITE : begin
