@@ -30,15 +30,23 @@ output reg clk_out; // 1Hz
 
 reg [25:0] q;
 wire [25:0] r;
+reg init;
 
 always @(posedge clk_in or negedge rst) begin
     if(!rst) begin
         q <= 0;
         clk_out <= 0;
+        init <= 1;
     end
     else if(q == p) begin
-        clk_out <= ~clk_out;
-        q <= 0;
+        if(init) begin
+            q <= 0;
+            init <= 0;
+        end
+        else begin
+            clk_out <= ~clk_out;
+            q <= 0;
+        end
     end
     else q <= r;
 end
