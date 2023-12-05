@@ -22,11 +22,11 @@
 
 module clock_divider(clk_in, rst, clk_out);
 
-parameter p = 1; // 4999 for 1Hz output
+parameter p = 1; // clk_in frequency / (2 * (p + 1)) = clk_out frequency
 input clk_in; // input clk 10kHz
 input rst;
 
-output reg clk_out; // 1Hz
+output reg clk_out; 
 
 reg [25:0] q;
 wire [25:0] r;

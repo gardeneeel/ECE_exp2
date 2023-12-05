@@ -54,8 +54,7 @@ parameter DELAY        = 3'b000,
           DISP_ONOFF   = 3'b011,
           LINE1        = 3'b100,
           LINE2        = 3'b101,
-          DELAY_T      = 3'b110,
-          CLEAR_DISP   = 3'b111;
+          DELAY_T      = 3'b110;
 
 integer cnt;
 
@@ -63,9 +62,9 @@ wire [7:0] bcd_h;
 wire [7:0] bcd_m;
 wire [7:0] bcd_s;
 
-bin_to_BCD B1(clk, rst, bin_h, bcd_h);
-bin_to_BCD B2(clk, rst, bin_m, bcd_m);
-bin_to_BCD B3(clk, rst, bin_s, bcd_s);
+bin_to_BCD B1(clk, rst, {3'b000, bin_h}, bcd_h);
+bin_to_BCD B2(clk, rst, {2'b00, bin_m}, bcd_m);
+bin_to_BCD B3(clk, rst, {2'b00, bin_s}, bcd_s);
 
 always @(posedge clk or negedge rst) begin
     if(!rst) begin 
@@ -105,11 +104,6 @@ always @(posedge clk or negedge rst) begin
                 else cnt = cnt + 1;
             end
             DELAY_T : begin
-                if (cnt == 5) state = CLEAR_DISP;
-                if(cnt >= 5) cnt = 0;
-                else cnt = cnt + 1;
-            end
-            CLEAR_DISP : begin
                 if (cnt == 5) state = LINE1;
                 if(cnt >= 5) cnt = 0;
                 else cnt = cnt + 1;
@@ -278,8 +272,6 @@ always @(posedge clk or negedge rst) begin
             end
             DELAY_T : 
                 {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_0000_0010; // cursor at home
-            CLEAR_DISP :
-                {LCD_RS, LCD_RW, LCD_DATA} = 10'b0_0_0000_0010;
             default : 
                 {LCD_RS, LCD_RW, LCD_DATA} = 10'b1_1_0000_0000; // busy flag & address reading
         endcase
