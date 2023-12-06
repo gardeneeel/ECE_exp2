@@ -155,7 +155,7 @@ always @(posedge clk or negedge rst) begin // 보행신호등 점멸신호 전환
         cnt_flicker <= 0;
     end
     else if(flicker_enable) begin
-        if(cnt_flicker >= cnt_1s - 1) begin // 1s delay
+        if(cnt_flicker >= cnt_1s / 2 - 1) begin // 0.5초마다 전환
             led_flicker <= ~led_flicker; 
             cnt_flicker <= 0;
         end
@@ -182,8 +182,8 @@ always @(posedge clk or negedge rst) begin // state control
         cnt_state <= 0;
     end
     else if(manual_ready == 1) begin // 1s delay for manual control
-        if(cnt_state == cnt_1s - 1) state <= STATE_A;
         if(cnt_state >= cnt_1s - 1) begin
+            state <= STATE_A;
             cnt_state <= 0;
             manual_ready <= 0;
             manual_enable <= 1; 
@@ -195,9 +195,9 @@ always @(posedge clk or negedge rst) begin // state control
         case(state)
             STATE_A : begin
                 if(manual_enable) begin // 15s duration for manual control
-                    if(cnt_state == 15 * cnt_1s - 1) state <= next_state;
-                    else if(cnt_state == 15 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                    if(cnt_state == 15 * cnt_1s / 2 - 1) flicker_enable <= 1;
                     if(cnt_state >= 15 * cnt_1s - 1) begin
+                        state <= next_state;
                         cnt_state <= 0;
                         manual_enable <= 0;
                         flicker_enable <= 0;
@@ -206,9 +206,9 @@ always @(posedge clk or negedge rst) begin // state control
                 end
                 else if(!manual_enable) begin
                     next_state <= STATE_D;
-                    if(cnt_state == 5 * cnt_1s - 1) state <= next_state;
-                    else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                    if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                     if(cnt_state >= 5 * cnt_1s - 1) begin
+                        state <= next_state;
                         cnt_state <= 0;
                         flicker_enable <= 0;
                     end
@@ -217,9 +217,9 @@ always @(posedge clk or negedge rst) begin // state control
             end
             STATE_B : begin
                 next_state <= STATE_A;
-                if(cnt_state == 5 * cnt_1s - 1) state <= next_state;
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -227,9 +227,9 @@ always @(posedge clk or negedge rst) begin // state control
             end
             STATE_C : begin
                 next_state <= STATE_A;
-                if(cnt_state == 5 * cnt_1s - 1) state <= next_state;
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -237,25 +237,25 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_D : begin
                 next_state <= STATE_F;
-                if(cnt_state == 5 * cnt_1s - 1) state <= next_state;
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
             end            
             STATE_E : begin
-                next_state <= (passed_G) ? STATE_A : STATE_G;
-                if(cnt_state == 5 * cnt_1s - 1 && passed_G == 0) begin
-                    state <= STATE_G;
+                next_state <= (passed_G) ? STATE_A : STATE_G;            
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state >= 5 * cnt_1s - 1 && passed_G == 0) begin
+                    state <= next_state;
                     passed_G <= 1;
                 end
-                else if(cnt_state == 5 * cnt_1s - 1 && passed_G == 1) begin
-                    state <= STATE_A;
+                else if(cnt_state >= 5 * cnt_1s - 1 && passed_G == 1) begin
+                    state <= next_state;
                     passed_G <= 0;
-                end
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                end                
                 if(cnt_state >= 5 * cnt_1s - 1) begin
                     cnt_state <= 0;
                     flicker_enable <= 0;
@@ -264,9 +264,9 @@ always @(posedge clk or negedge rst) begin // state control
             end
             STATE_F : begin
                 next_state <= STATE_E;
-                if(cnt_state == 5 * cnt_1s - 1) state <= STATE_E;
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end             
@@ -274,9 +274,9 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_G : begin
                 next_state <= STATE_E;
-                if(cnt_state == 5 * cnt_1s - 1) state <= STATE_E;
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -284,9 +284,9 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_H : begin
                 next_state <= STATE_A;
-                if(cnt_state == 5 * cnt_1s - 1) state <= STATE_A;
-                else if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -299,9 +299,9 @@ always @(posedge clk or negedge rst) begin // state control
         case(state)
             STATE_A : begin
                 if(manual_enable) begin // 15s duration for manual control
-                    if(cnt_state == 15 * cnt_1s - 1) state <= next_state;
-                    else if(cnt_state == 15 / 2 * cnt_1s - 1) flicker_enable <= 1;
+                    if(cnt_state == 15 / 2 * cnt_1s - 1) flicker_enable <= 1;
                     if(cnt_state >= 15 * cnt_1s - 1) begin
+                        state <= next_state;
                         cnt_state <= 0;
                         manual_enable <= 0;
                         flicker_enable <= 0;
@@ -309,16 +309,16 @@ always @(posedge clk or negedge rst) begin // state control
                     else cnt_state <= cnt_state + 1;
                 end
                 else if(!manual_enable) begin
-                    next_state <= (passed_C) ? STATE_E : STATE_C;       
-                    if(cnt_state == 10 * cnt_1s - 1 && passed_C == 0) begin
-                        state <= STATE_C;
+                    next_state <= (passed_C) ? STATE_E : STATE_C;   
+                    if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;    
+                    if(cnt_state >= 10 * cnt_1s - 1 && passed_C == 0) begin
+                        state <= next_state;
                         passed_C <= 1;
                     end
-                    else if(cnt_state == 10 * cnt_1s - 1 && passed_C == 1) begin
-                        state <= STATE_E;
+                    else if(cnt_state >= 10 * cnt_1s - 1 && passed_C == 1) begin
+                        state <= next_state;
                         passed_C <= 0;
                     end
-                    else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                     if(cnt_state >= 10 * cnt_1s - 1) begin
                         cnt_state <= 0;
                         flicker_enable <= 0;
@@ -328,9 +328,9 @@ always @(posedge clk or negedge rst) begin // state control
             end
             STATE_B : begin
                 next_state <= STATE_A;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_A;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -338,9 +338,9 @@ always @(posedge clk or negedge rst) begin // state control
             end
             STATE_C : begin
                 next_state <= STATE_A;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_A;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -348,9 +348,9 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_D : begin
                 next_state <= STATE_B;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_B;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -358,9 +358,9 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_E : begin
                 next_state <= STATE_H;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_H;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -368,9 +368,9 @@ always @(posedge clk or negedge rst) begin // state control
             end
             STATE_F : begin
                 next_state <= STATE_B;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_B;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -378,9 +378,9 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_G : begin
                 next_state <= STATE_B;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_B;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
@@ -388,9 +388,9 @@ always @(posedge clk or negedge rst) begin // state control
             end            
             STATE_H : begin
                 next_state <= STATE_B;
-                if(cnt_state == 10 * cnt_1s - 1) state <= STATE_B;
-                else if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
+                if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
+                    state <= next_state;
                     cnt_state <= 0;
                     flicker_enable <= 0;
                 end
