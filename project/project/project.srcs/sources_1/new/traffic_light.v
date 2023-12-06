@@ -167,26 +167,26 @@ assign day_night = (cnt_h >= 8 && cnt_h < 23) ? DAY : NIGHT; // 08:00 ~ 23:00 =>
 
 always @(posedge clk or negedge rst) begin // state control
     if(!rst) begin
-        state <= STATE_B;
-        cnt_state <= 0;
-        passed_G <= 0;
-        passed_C <= 0;
-        next_state <= 3'b000;
-        manual_ready <= 0;
-        manual_enable <= 0;
+        state          <= STATE_B;
+        cnt_state      <= 0;
+        passed_G       <= 0;
+        passed_C       <= 0;
+        next_state     <= 3'b000;
+        manual_ready   <= 0;
+        manual_enable  <= 0;
         flicker_enable <= 0;
     end
     else if(btn_manual_t) begin // manual control
-        next_state <= state;
+        next_state   <= state;
         manual_ready <= 1;
-        cnt_state <= 0;
+        cnt_state    <= 0;
     end
     else if(manual_ready == 1) begin // 1s delay for manual control
         if(cnt_state >= cnt_1s - 1) begin
-            state <= STATE_A;
-            cnt_state <= 0;
-            manual_ready <= 0;
-            manual_enable <= 1; 
+            state          <= STATE_A;
+            cnt_state      <= 0;
+            manual_ready   <= 0;
+            manual_enable  <= 1; 
             flicker_enable <= 0;
         end     
         else cnt_state <= cnt_state + 1;  
@@ -197,9 +197,9 @@ always @(posedge clk or negedge rst) begin // state control
                 if(manual_enable) begin // 15s duration for manual control
                     if(cnt_state == 15 * cnt_1s / 2 - 1) flicker_enable <= 1;
                     if(cnt_state >= 15 * cnt_1s - 1) begin
-                        state <= next_state;
-                        cnt_state <= 0;
-                        manual_enable <= 0;
+                        state          <= next_state;
+                        cnt_state      <= 0;
+                        manual_enable  <= 0;
                         flicker_enable <= 0;
                     end    
                     else cnt_state <= cnt_state + 1;
@@ -208,8 +208,8 @@ always @(posedge clk or negedge rst) begin // state control
                     next_state <= STATE_D;
                     if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                     if(cnt_state >= 5 * cnt_1s - 1) begin
-                        state <= next_state;
-                        cnt_state <= 0;
+                        state          <= next_state;
+                        cnt_state      <= 0;
                         flicker_enable <= 0;
                     end
                     else cnt_state <= cnt_state + 1;
@@ -219,8 +219,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_A;
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -229,8 +229,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_A;
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -239,8 +239,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_F;
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -249,15 +249,15 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= (passed_G) ? STATE_A : STATE_G;            
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1 && passed_G == 0) begin
-                    state <= next_state;
+                    state    <= next_state;
                     passed_G <= 1;
                 end
                 else if(cnt_state >= 5 * cnt_1s - 1 && passed_G == 1) begin
-                    state <= next_state;
+                    state    <= next_state;
                     passed_G <= 0;
                 end                
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    cnt_state <= 0;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -266,8 +266,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_E;
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end             
                 else cnt_state <= cnt_state + 1;
@@ -276,8 +276,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_E;
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -286,8 +286,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_A;
                 if(cnt_state == 5 * cnt_1s / 2 - 1) flicker_enable <= 1;
                 if(cnt_state >= 5 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -301,9 +301,9 @@ always @(posedge clk or negedge rst) begin // state control
                 if(manual_enable) begin // 15s duration for manual control
                     if(cnt_state == 15 / 2 * cnt_1s - 1) flicker_enable <= 1;
                     if(cnt_state >= 15 * cnt_1s - 1) begin
-                        state <= next_state;
-                        cnt_state <= 0;
-                        manual_enable <= 0;
+                        state          <= next_state;
+                        cnt_state      <= 0;
+                        manual_enable  <= 0;
                         flicker_enable <= 0;
                     end    
                     else cnt_state <= cnt_state + 1;
@@ -312,15 +312,15 @@ always @(posedge clk or negedge rst) begin // state control
                     next_state <= (passed_C) ? STATE_E : STATE_C;   
                     if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;    
                     if(cnt_state >= 10 * cnt_1s - 1 && passed_C == 0) begin
-                        state <= next_state;
+                        state    <= next_state;
                         passed_C <= 1;
                     end
                     else if(cnt_state >= 10 * cnt_1s - 1 && passed_C == 1) begin
-                        state <= next_state;
+                        state    <= next_state;
                         passed_C <= 0;
                     end
                     if(cnt_state >= 10 * cnt_1s - 1) begin
-                        cnt_state <= 0;
+                        cnt_state      <= 0;
                         flicker_enable <= 0;
                     end
                     else cnt_state <= cnt_state + 1;
@@ -330,8 +330,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_A;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -340,8 +340,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_A;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -350,8 +350,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_B;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -360,8 +360,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_H;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -370,8 +370,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_B;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -380,8 +380,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_B;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -390,8 +390,8 @@ always @(posedge clk or negedge rst) begin // state control
                 next_state <= STATE_B;
                 if(cnt_state == 5 * cnt_1s - 1) flicker_enable <= 1;
                 if(cnt_state >= 10 * cnt_1s - 1) begin
-                    state <= next_state;
-                    cnt_state <= 0;
+                    state          <= next_state;
+                    cnt_state      <= 0;
                     flicker_enable <= 0;
                 end
                 else cnt_state <= cnt_state + 1;
@@ -420,11 +420,11 @@ end
 always @(posedge clk or negedge rst) begin // led control
     if(!rst) begin
          led_w_green <= 4'b0000;
-         led_w_red <= 4'b0000;
-         led_green <= 4'b0000;
-         led_yellow <= 4'b0000;
-         led_red <= 4'b0000;
-         led_left <= 4'b0000;
+         led_w_red   <= 4'b0000;
+         led_green   <= 4'b0000;
+         led_yellow  <= 4'b0000;
+         led_red     <= 4'b0000;
+         led_left    <= 4'b0000;
     end
     else if(day_night == DAY) begin 
         case(state)
